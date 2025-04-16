@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório do Diagnóstico Patrimonial</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #ffffff, #f4f4f4);
+      color: #060040;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #fff;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      animation: fadeIn 0.7s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      max-width: 240px;
+      height: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      color: #060040;
+      margin-bottom: 10px;
+    }
+
+    .dados-servidor {
+      text-align: center;
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .selo {
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      padding: 18px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      color: white;
+    }
+    .critico { background-color: #dc3545; }
+    .deficiente { background-color: #fd7e14; }
+    .razoavel { background-color: #ffc107; color: #060040; }
+    .eficiente { background-color: #28a745; }
+
+    .secao {
+      margin-bottom: 30px;
+    }
+
+    .secao h2 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #060040;
+      border-left: 4px solid #060040;
+      padding-left: 12px;
+    }
+
+    .secao p {
+      font-size: 16px;
+      line-height: 1.7;
+      text-align: justify;
+      color: #333;
+    }
+
+    .botoes {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .botoes button {
+      padding: 12px 24px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: all 0.3s ease;
+    }
+
+    .botoes .imprimir {
+      background-color: #060040;
+      color: white;
+    }
+
+    .botoes .voltar {
+      background-color: #999;
+      color: white;
+    }
+
+    .botoes button:hover {
+      opacity: 0.85;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 15px;
+      }
+
+      .secao h2 {
+        font-size: 18px;
+      }
+
+      .botoes button {
+        margin: 10px 5px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="https://patrimonionapratica.com.br/arquivos/logo-principal.png" alt="Logo Patrimônio na Prática">
+    </div>
+
+    <h1>Relatório do Diagnóstico Patrimonial</h1>
+    <div class="dados-servidor" id="dadosServidor">Carregando dados...</div>
+
+    <div class="selo" id="seloNivel">[Nível de Maturidade]</div>
+
+    <div class="secao">
+      <h2>Análise do Diagnóstico</h2>
+      <p id="textoAnalise">[Texto sobre a situação atual do controle patrimonial]</p>
+    </div>
+
+    <div class="secao">
+      <h2>Recomendações ao Gestor Público</h2>
+      <p id="textoRecomendacoes">[Ações práticas recomendadas]</p>
+    </div>
+
+    <div class="botoes">
+      <button class="imprimir" onclick="window.print()">🖰️ Imprimir Relatório</button>
+      <button class="voltar" onclick="window.history.back()">🔙 Voltar</button>
+    </div>
+  </div>
+
+  <script>
+    const dados = JSON.parse(sessionStorage.getItem("dadosRelatorio"));
+
+    if (dados) {
+      document.getElementById("dadosServidor").innerText = `${dados.servidor} – ${dados.municipio} | ${dados.secretaria} – ${dados.setor}`;
+
+      const selo = document.getElementById("seloNivel");
+      const textoAnalise = document.getElementById("textoAnalise");
+      const textoRecomendacoes = document.getElementById("textoRecomendacoes");
+
+      switch (dados.nivel) {
+        case "critico":
+          selo.classList.add("critico");
+          selo.innerText = "🚨 Nível Crítico";
+          textoAnalise.innerText = "O controle patrimonial apresenta falhas graves e generalizadas, tornando o setor altamente vulnerável.";
+          textoRecomendacoes.innerText = "Elabore um plano emergencial com apoio técnico especializado, reestruture imediatamente os processos de controle, crie normativas internas e inicie um inventário completo.";
+          break;
+        case "deficiente":
+          selo.classList.add("deficiente");
+          selo.innerText = "🔹 Nível Deficiente";
+          textoAnalise.innerText = "O controle patrimonial está presente, mas com deficiências relevantes e risco de fragilidade nos registros e processos.";
+          textoRecomendacoes.innerText = "Revise todos os fluxos de controle, formalize os processos, invista em capacitação da equipe e implemente rotinas mais seguras.";
+          break;
+        case "razoavel":
+          selo.classList.add("razoavel");
+          selo.innerText = "🟡 Nível Razoável";
+          textoAnalise.innerText = "A organização possui uma base estruturada, mas com falhas pontuais que exigem atenção para garantir maior eficiência.";
+          textoRecomendacoes.innerText = "Realize melhorias nos fluxos de movimentação, padronize normativas e monitore indicadores de desempenho patrimonial.";
+          break;
+        case "eficiente":
+          selo.classList.add("eficiente");
+          selo.innerText = "✅ Nível Eficiente";
+          textoAnalise.innerText = "O controle patrimonial está em alto nível de conformidade, com processos consolidados e dados confiáveis.";
+          textoRecomendacoes.innerText = "Mantenha as boas práticas, invista em inovação tecnológica, reforce treinamentos contínuos e monitore permanentemente os resultados.";
+          break;
+        default:
+          selo.innerText = "[Nível não informado]";
+      }
+    } else {
+      document.getElementById("dadosServidor").innerText = "⚠️ Dados não disponíveis.";
+    }
+  </script>
+</body>
+</html>
